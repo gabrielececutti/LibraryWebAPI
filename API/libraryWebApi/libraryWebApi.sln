@@ -7,17 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libraryWebApi", "libraryWeb
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryData", "LibraryData\LibraryData.csproj", "{39B770D4-B25C-4202-B450-7CB455BB36D5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Persistence", "3-Persistence", "{F5802DE8-5218-4F04-AE3E-714E2D11F2E3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence_Layer", "Persistence_Layer", "{F5802DE8-5218-4F04-AE3E-714E2D11F2E3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-BusinessLogic", "2-BusinessLogic", "{BABE9AFA-874E-475C-8010-937524590300}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessLogic_Layer", "BusinessLogic_Layer", "{BABE9AFA-874E-475C-8010-937524590300}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Presentation", "1-Presentation", "{37B39BF5-E9EC-48F4-9DCC-F992CF24CD07}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation_Layer", "Presentation_Layer", "{37B39BF5-E9EC-48F4-9DCC-F992CF24CD07}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryModel", "LibraryModel\LibraryModel.csproj", "{0CD1BAA3-C49A-4A4B-8378-9BC0AAA281FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryMapper", "LibraryMapper\LibraryMapper.csproj", "{8CDD7656-BAC6-436A-8C0E-BA59CECAC478}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryMapper", "LibraryMapper\LibraryMapper.csproj", "{8CDD7656-BAC6-436A-8C0E-BA59CECAC478}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryCrudServices", "LibraryServices\LibraryCrudServices.csproj", "{7E328616-C201-4EAD-820B-421F56A62FEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryCrudServices", "LibraryServices\LibraryCrudServices.csproj", "{7E328616-C201-4EAD-820B-421F56A62FEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

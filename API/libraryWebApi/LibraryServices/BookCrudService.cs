@@ -1,4 +1,4 @@
-﻿using LibraryData.PersistenceServices;
+﻿using LibraryData.Repositories;
 using LibraryMapper;
 using LibraryModel;
 using LibraryModel.DTO;
@@ -7,23 +7,23 @@ namespace LibraryServices
 {
     public class BookCrudService : IBookCrudService
     {
-        private readonly IPersistenceServiceBook _persistenceServiceBook;
+        private readonly IBookRepository _bookRepository;
 
-        public BookCrudService(IPersistenceServiceBook persistenceServiceBook)
-            => _persistenceServiceBook = persistenceServiceBook;
+        public BookCrudService(IBookRepository bookRepository)
+            => _bookRepository = bookRepository;
 
         public BookViewDTO? Delete(string isbn)
-            => _persistenceServiceBook.Delete(isbn)?.ToViewDTO();
+            => _bookRepository.Delete(isbn)?.ToViewDTO();
 
         public IEnumerable<BookViewDTO> GetAll(int size, int number)
-            => _persistenceServiceBook.GetAll(size, number).ToViewDTO();
+            => _bookRepository.GetAll(size, number).ToViewDTO();
 
         public BookViewDTO? GetByISBN(string isbn)
-            => _persistenceServiceBook.GetByISBN(isbn)?.ToViewDTO();
+            => _bookRepository.GetByISBN(isbn)?.ToViewDTO();
 
         public BookInsertedResponseViewDTO Insert(IEnumerable<BookInsertDTO> books)
         {
-            var response =  _persistenceServiceBook.Insert(books.ToEntity()).ToViewDTO();
+            var response =  _bookRepository.Insert(books.ToEntity()).ToViewDTO();
             return new BookInsertedResponseViewDTO
             {
                 InsertedBooks = response.Item1,
@@ -33,8 +33,8 @@ namespace LibraryServices
 
         public BookViewDTO  Update(BookInsertDTO book, string isbn) 
         {
-            var existingBook = _persistenceServiceBook.GetByISBN(isbn) ?? throw new BookNotFoundException();
-            var updateBook = _persistenceServiceBook.Modify(existingBook, book.ToEntity()!).ToViewDTO();
+            var existingBook = _bookRepository.GetByISBN(isbn) ?? throw new BookNotFoundException();
+            var updateBook = _bookRepository.Modify(existingBook, book.ToEntity()!).ToViewDTO();
             return updateBook!;
         }
     }

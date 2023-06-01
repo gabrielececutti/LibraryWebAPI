@@ -1,7 +1,5 @@
 using LibraryData;
-using LibraryData.PersistenceServices;
 using LibraryData.Repositories;
-using LibraryModel;
 using LibraryServices;
 using libraryWebApi;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +18,6 @@ builder.Services.AddDbContext<LibraryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-builder.Services.AddScoped<IPersistenceServiceBook, PersistenceServiceBook>();
-builder.Services.AddScoped<IPersistenceServiceAuthor, PersistenceServiceAuthor>();
 builder.Services.AddScoped<IAuthorCrudService, AuthorCrudService>();
 builder.Services.AddScoped<IBookCrudService, BookCrudService>();
 

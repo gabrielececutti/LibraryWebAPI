@@ -1,4 +1,4 @@
-﻿using LibraryData.PersistenceServices;
+﻿using LibraryData.Repositories;
 using LibraryMapper;
 using LibraryModel.DTO;
 using LibraryModel.Models;
@@ -7,24 +7,24 @@ namespace LibraryServices
 {
     public class AuthorCrudService : IAuthorCrudService
     {
-        private readonly IPersistenceServiceAuthor _persistenceServiceAuthor;
+        private readonly IAuthorRepository _authorRepository;
 
-        public AuthorCrudService(IPersistenceServiceAuthor persistenceServiceAuthor)
-           => _persistenceServiceAuthor = persistenceServiceAuthor;
+        public AuthorCrudService(IAuthorRepository authorRepository)
+           => _authorRepository = authorRepository;
 
         public AuthorViewDTO Create(AuthorDTO author)
-            => _persistenceServiceAuthor.Insert(author.ToEntity()!).ToViewDTO()!;
+            => _authorRepository.Insert(author.ToEntity()!).ToViewDTO()!;
 
         public AuthorViewDTO? Delete(int id)
-            => _persistenceServiceAuthor.Delete(id)?.ToViewDTO();
+            => _authorRepository.Delete(id)?.ToViewDTO();
 
         public IEnumerable<AuthorViewDTO> GetAll() 
-            => _persistenceServiceAuthor.GetAll().ToViewDTO();
+            => _authorRepository.GetAll().ToViewDTO();
 
         public AuthorViewDTO? GetById(int id)
-            => _persistenceServiceAuthor.GetById(id)?.ToViewDTO();
+            => _authorRepository.GetById(id)?.ToViewDTO();
 
         public AuthorViewDTO Update(Author author) 
-            => _persistenceServiceAuthor.Modify(author).ToViewDTO()!;
+            => _authorRepository.Modify(author).ToViewDTO()!;
     }
 }
