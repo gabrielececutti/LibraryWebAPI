@@ -1,6 +1,9 @@
-﻿using LibraryModel;
-using LibraryModel.DTO;
-using LibraryServices;
+﻿using AutoMapper;
+using LibraryModel;
+using LibraryPersistenceLayer.Exceptions;
+using LibraryPersistenceLayer.Models;
+using LibraryPersistenceLayer.Repositories.Abstract;
+using LibraryWebApi.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace libraryWebApi.Controllers
@@ -9,13 +12,15 @@ namespace libraryWebApi.Controllers
     [Route("[controller]/[action]")]
     public class BookController : ControllerBase
     {
-        private readonly IBookCrudService _bookCrudService;
+        private readonly IBookRepository _bookRepository;
         private readonly ILogger<AuthorController> _logger;
+        private readonly IMapper _mapper;
 
-        public BookController(ILogger<AuthorController> logger, IBookCrudService bookCrudService)
+        public BookController(IBookRepository bookRepository, ILogger<AuthorController> logger, IMapper mapper)
         {
+            _bookRepository = bookRepository;
             _logger = logger;
-            _bookCrudService = bookCrudService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -24,8 +29,10 @@ namespace libraryWebApi.Controllers
             if (size < 0 || number < 0) return BadRequest("Inserisci dei numeri validi!");
             try
             {
-                return Ok(_bookCrudService.GetAll(size, number)); 
-            } catch (Exception)
+                var books = _mapper.Map<IEnumerable<BookResponseDTO>>(_bookRepository.GetAll(size, number));
+                return Ok(books);
+            }
+            catch (Exception)
             {
                 return StatusCode(500, "Qualcosa è andato storto :(");
             }
@@ -37,8 +44,8 @@ namespace libraryWebApi.Controllers
             if (!IsbnValidator.IsValid(isbn)) return BadRequest("ISBN non valido!");
             try
             {
-                var book = _bookCrudService.GetByISBN(isbn);
-                return (book != default) 
+                var book = _mapper.Map<BookResponseDTO>(_bookRepository.GetByISBN(isbn));
+                return (book != default)
                     ? Ok(book)
                     : NotFound("Libro non trovato!");
             }
@@ -54,9 +61,10 @@ namespace libraryWebApi.Controllers
             if (!books.All(b => IsbnValidator.IsValid(b.Isbn))) return BadRequest("Uno o più ISBN non validi!");
             try
             {
-                return Ok(_bookCrudService.Insert(books));
+                return Ok();
             }
-            catch (InvalidOperationException) {
+            catch (InvalidOperationException)
+            {
                 return BadRequest("Non puoi inserire libri con un ISBN già esistente!");
             }
             catch (Exception)
@@ -66,13 +74,14 @@ namespace libraryWebApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult? Update([FromBody] BookInsertDTO book, string isbn)
+        public IActionResult? Update([FromRoute] string isbn, [FromBody] BookInsertDTO book)
         {
             if (!IsbnValidator.IsValid(isbn)) return BadRequest("ISBN non valido!");
             if (!IsbnValidator.IsValid(book.Isbn)) return BadRequest("nuovo ISBN non valido");
             try
             {
-                var bookUpdated = _bookCrudService.Update(book, isbn);
+                var toUpdate = _mapper.Map<Book>(book);
+                var bookUpdated = _mapper.Map<BookResponseDTO>(_bookRepository.Modify(toUpdate));
                 return Ok(bookUpdated);
             }
             catch (BookNotFoundException)
@@ -99,11 +108,13 @@ namespace libraryWebApi.Controllers
             if (!IsbnValidator.IsValid(isbn)) return BadRequest("ISBN non valido!");
             try
             {
-                var book = _bookCrudService.Delete(isbn);
+                var book = _mapper.Map<BookResponseDTO>(_bookRepository.Delete(isbn));
                 return book != default
                     ? Ok(book) :
                     NotFound("Non esiste un libro associato con quell'ISBN!");
-            } catch(Exception) {
+            }
+            catch (Exception)
+            {
                 return StatusCode(500, "Qualcosa è andato storto :(");
             }
         }

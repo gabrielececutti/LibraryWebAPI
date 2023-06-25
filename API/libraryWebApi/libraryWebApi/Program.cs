@@ -1,7 +1,11 @@
-using LibraryData;
-using LibraryData.Repositories;
-using LibraryServices;
+using AutoMapper;
+using LibraryBusinessLogic.AutoMappersProfiles;
+using LibraryPersistenceLayer.Configurations;
+using LibraryPersistenceLayer.Models;
+using LibraryPersistenceLayer.Repositories.Abstract;
+using LibraryPersistenceLayer.Repositories.Concrete;
 using libraryWebApi;
+using LibraryWebApi.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,13 +17,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+MapperConfigurationExpression configuration = new MapperConfigurationExpression();
+configuration.AddProfiles(new List<Profile>() { new MainProfile() });
+
+var mappingConfiguration = new MapperConfiguration(configuration);
+mappingConfiguration.AssertConfigurationIsValid();
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddMaps(typeof(MainProfile));
+    cfg.AllowNullDestinationValues = true;
+});
+
 
 builder.Services.AddDbContext<LibraryDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-builder.Services.AddScoped<IAuthorCrudService, AuthorCrudService>();
-builder.Services.AddScoped<IBookCrudService, BookCrudService>();
+
+var config = new MapperConfiguration(cfg =>
+                  cfg.CreateMap<Author, AuthorDto>()
+              );
 
 var app = builder.Build();
 

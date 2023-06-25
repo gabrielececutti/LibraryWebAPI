@@ -1,4 +1,4 @@
-﻿using LibraryData;
+﻿using LibraryPersistenceLayer.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace libraryWebApi

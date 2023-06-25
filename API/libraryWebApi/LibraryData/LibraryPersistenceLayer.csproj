@@ -15,8 +15,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LibraryModel\LibraryModel.csproj" />
-  </ItemGroup>
-
 </Project>
